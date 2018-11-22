@@ -1,8 +1,7 @@
 import numpy as np
-from scipy.ndimage import convolve
 from sklearn.neural_network import MLPClassifier
 from sklearn.datasets import fetch_mldata
-from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV
+from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.externals import joblib
 import os.path
 

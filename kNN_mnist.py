@@ -23,7 +23,7 @@ print("training data points: {}".format(len(trainLabels)))
 print("validation data points: {}".format(len(valLabels)))
 print("testing data points: {}".format(len(testLabels)))
 
-#Initialiserer k får vår knn classifier
+# Initialiserer k får vår knn classifier
 kVals = range(1, 30, 2)
 accuracies = []
 
@@ -33,7 +33,7 @@ for k in range(1, 30, 2):
     model = KNeighborsClassifier(n_neighbors=k)
     model.fit(trainData, trainLabels)
 
-    #Evaluate moddelen og print
+    # Evaluate moddelen og print
     score = model.score(valData, valLabels)
     print("k=%d, accuracy=%.2f%%" % (k, score * 100))
     accuracies.append(score)
@@ -58,7 +58,7 @@ print(classification_report(testLabels, predictions))
 
 # check predictions against images
 # loop over a few random digits
-for i in np.random.randint(0, high=len(testLabels), size=(5,)):
+for i in np.random.randint(0, high=len(testLabels), size=(10,)):
     # np.random.randint(low, high=None, size=None, dtype='l')
     image = testData[i]
     prediction = model.predict(image.reshape(1, -1))[0]
@@ -72,4 +72,4 @@ for i in np.random.randint(0, high=len(testLabels), size=(5,)):
     # show the prediction
     print("I think that digit is: {}".format(prediction))
     cv2.imshow("Image", image)
-    cv2.waitKey(0) # press enter to view each one!
+    cv2.waitKey(0)  # press enter to view each one!
