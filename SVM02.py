@@ -1,8 +1,10 @@
 import numpy as np
 
+# KILDER:
+# https://martin-thoma.com/svm-with-sklearn/
+# https://scikit-learn.org/stable/modules/svm.html
 
 def main():
-    """Orchestrate the retrival of data, training and testing."""
     data = get_data()
 
     # Get classifier
@@ -20,14 +22,6 @@ def main():
 
 
 def analyze(clf, data):
-    """
-    Analyze how well a classifier performs on data.
-
-    Parameters
-    ----------
-    clf : classifier object
-    data : dict
-    """
     # Get confusion matrix
     from sklearn import metrics
     predicted = clf.predict(data['test']['X'])
@@ -47,15 +41,6 @@ def analyze(clf, data):
 
 
 def view_image(image, label=""):
-    """
-    View a single image.
-
-    Parameters
-    ----------
-    image : numpy array
-        Make sure this is of the shape you want.
-    label : str
-    """
     from matplotlib.pyplot import show, imshow, cm
     print("Label: %s" % label)
     imshow(image, cmap=cm.gray)
@@ -63,58 +48,24 @@ def view_image(image, label=""):
 
 
 def get_data():
-    """
-    Get data ready to learn with.
+    # Load the original dataset
+    from sklearn.datasets import fetch_mldata
+    from sklearn.utils import shuffle
+    mnist = fetch_mldata('MNIST original')
 
-    Returns
-    -------
-    dict
-    """
-    simple = False
-    if simple:  # Load the simple, but similar digits dataset
-        from sklearn.datasets import load_digits
-        from sklearn.utils import shuffle
-        digits = load_digits()
-        x = [np.array(el).flatten() for el in digits.images]
-        y = digits.target
+    x = mnist.data
+    y = mnist.target
 
-        # Scale data to [-1, 1] - This is of mayor importance!!!
-        # In this case, I know the range and thus I can (and should) scale
-        # manually. However, this might not always be the case.
-        # Then try sklearn.preprocessing.MinMaxScaler or
-        # sklearn.preprocessing.StandardScaler
-        x = x/255.0*2 - 1
+    # Scale data to [-1, 1] - This is of mayor importance!!!
+    x = x/255.0*2 - 1
 
-        x, y = shuffle(x, y, random_state=0)
+    x, y = shuffle(x, y, random_state=0)
 
-        from sklearn.cross_validation import train_test_split
-        x_train, x_test, y_train, y_test = train_test_split(x, y,
-                                                            test_size=0.33,
-                                                            random_state=42)
-        data = {'train': {'X': x_train,
+    from sklearn.model_selection import train_test_split
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.33, random_state=42)
+    data = {'train': {'X': x_train,
                           'y': y_train},
-                'test': {'X': x_test,
-                         'y': y_test}}
-    else:  # Load the original dataset
-        from sklearn.datasets import fetch_mldata
-        from sklearn.utils import shuffle
-        mnist = fetch_mldata('MNIST original')
-
-        x = mnist.data
-        y = mnist.target
-
-        # Scale data to [-1, 1] - This is of mayor importance!!!
-        x = x/255.0*2 - 1
-
-        x, y = shuffle(x, y, random_state=0)
-
-        from sklearn.cross_validation import train_test_split
-        x_train, x_test, y_train, y_test = train_test_split(x, y,
-                                                            test_size=0.33,
-                                                            random_state=42)
-        data = {'train': {'X': x_train,
-                          'y': y_train},
-                'test': {'X': x_test,
+            'test': {'X': x_test,
                          'y': y_test}}
     return data
 
