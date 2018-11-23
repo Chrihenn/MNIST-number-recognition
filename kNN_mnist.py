@@ -1,14 +1,14 @@
 from __future__ import print_function
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import classification_report
-from sklearn import datasets
+from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.datasets import fetch_mldata
 from skimage import exposure
 import numpy as np
 import imutils
 import cv2
 
-mnist = datasets.load_digits()
+mnist = fetch_mldata('MNIST original')
 # print(mnist.data)
 
 # 75% for trening og 25% for testing
@@ -49,13 +49,12 @@ model.fit(trainData, trainLabels)
 # Predict labels for test settet
 predictions = model.predict(testData)
 
-# Evaluate performance of model for each of the digits
+print("Confusion matrix:\n%s" % confusion_matrix(testData, predictions))
 print("\nEVALUATION ON TESTING DATA")
 print(classification_report(testLabels, predictions))
 
-# some indices are classified correctly 100% of the time (precision = 1)
-# high accuracy (98%)
 
+'''
 # check predictions against images
 # loop over a few random digits
 for i in np.random.randint(0, high=len(testLabels), size=(10,)):
@@ -65,7 +64,7 @@ for i in np.random.randint(0, high=len(testLabels), size=(10,)):
 
     # convert the image for a 64-dim array to an 8 x 8 image compatible with OpenCV,
     # then resize it to 32 x 32 pixels for better visualization
-    image = image.reshape((8, 8)).astype("uint8")
+    image = image.reshape((392, 392)).astype("uint8")
     image = exposure.rescale_intensity(image, out_range=(0, 255))
     image = imutils.resize(image, width=32, inter=cv2.INTER_CUBIC)
 
@@ -73,3 +72,4 @@ for i in np.random.randint(0, high=len(testLabels), size=(10,)):
     print("I think that digit is: {}".format(prediction))
     cv2.imshow("Image", image)
     cv2.waitKey(0)  # press enter to view each one!
+    '''
