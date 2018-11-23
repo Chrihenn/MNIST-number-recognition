@@ -3,19 +3,18 @@ from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.datasets import fetch_mldata
-from skimage import exposure
 import numpy as np
-import imutils
-import cv2
+
 
 mnist = fetch_mldata('MNIST original')
 # print(mnist.data)
 
 # 75% for trening og 25% for testing
-(trainData, testData, trainLabels, testLabels) = train_test_split(np.array(mnist.data),
-                                                mnist.target, test_size=0.25, random_state=42)
+(trainData, testData, trainLabels, testLabels) = train_test_split(np.array(mnist.data),mnist.target, test_size=0.25,
+                                                                  random_state=42)
 
 # Tar 10% av trenings dataen og brukes til validation
+
 (trainData, valData, trainLabels, valLabels) = train_test_split(trainData, trainLabels, test_size=0.1, random_state=84)
 
 # Ser på størrelsen for hver split
@@ -43,13 +42,13 @@ i = np.argmax(accuracies)
 print("k=%d achieved highest accuracy of %.2f%% on validation data" % (kVals[i], accuracies[i] * 100))
 
 # Nå som vi har den beste K verdien, tren classifieren på nytt
-model = KNeighborsClassifier(n_neighbors=kVals[i])
+model = KNeighborsClassifier(n_neighbors=kVals[i], algorithm='brute')
 model.fit(trainData, trainLabels)
 
 # Predict labels for test settet
 predictions = model.predict(testData)
 
-print("Confusion matrix:\n%s" % confusion_matrix(testData, predictions))
-print("\nEVALUATION ON TESTING DATA")
-print(classification_report(testLabels, predictions))
+print('Confusion Matrix: \n', confusion_matrix(testLabels.ravel(), predictions))
+print('\nClassification Report:\n', classification_report(testLabels.ravel(), predictions))
+print('kNN accuracy: ', model.score(testData, testLabels))
 

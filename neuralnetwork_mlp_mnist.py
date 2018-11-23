@@ -1,6 +1,7 @@
 import numpy as np
 from sklearn.neural_network import MLPClassifier
 from sklearn.datasets import fetch_mldata
+from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.externals import joblib
 import os.path
@@ -36,5 +37,11 @@ if __name__ == '__main__':
         joblib.dump(clf, PATH)
         clf = clf.best_estimator_
 
-    pred = clf.score(X_test, y_test)
-    print('Test accuracy:', pred)
+    score = clf.score(X_test, y_test)
+    y_true = testLabels.ravel()
+    pred = clf.predict(testData)
+
+    print('Confusion Matrix: \n', confusion_matrix(y_true, pred))
+    print('\nClassification Report:\n', classification_report(y_true, pred))
+    print('MLP accuracy: ', score)
+
