@@ -10,7 +10,7 @@ mnist = fetch_mldata('MNIST original')
 # print(mnist.data)
 
 # 75% for trening og 25% for testing
-(trainData, testData, trainLabels, testLabels) = train_test_split(np.array(mnist.data),mnist.target, test_size=0.25,
+(trainData, testData, trainLabels, testLabels) = train_test_split(np.array(mnist.data), mnist.target, test_size=0.25,
                                                                   random_state=42)
 
 # Tar 10% av trenings dataen og brukes til validation
@@ -51,4 +51,3 @@ predictions = model.predict(testData)
 print('Confusion Matrix: \n', confusion_matrix(testLabels.ravel(), predictions))
 print('\nClassification Report:\n', classification_report(testLabels.ravel(), predictions))
 print('kNN accuracy: ', model.score(testData, testLabels))
-
